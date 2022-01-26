@@ -42,14 +42,9 @@ class Module(AbstractDataSource):
     """
     name = "dummymongo"
     storage_type = "nosql"
-    data_file = """
-    DROP DATABASE IF EXISTS dhtk;
-    CREATE DATABASE IF NOT EXISTS dhtk;
-    USE dhtk;
-
-    CREATE OR REPLACE TABLE test (id INT NOT NULL, name CHAR(10));
-    
-    INSERT INTO `test` VALUES (1001, 'Mattia'), (1002, 'Davide');
+    data_file = """{ "_id" : 1, "title" : "Unlocking Android", "isbn" : "1933988673", "pageCount" : 416}
+{ "_id" : 2, "title" : "Android in Action, Second Edition", "isbn" : "1935182722", "pageCount" : 592}
+{ "_id" : 3, "title" : "Specification by Example", "isbn" : "1617290084", "pageCount" : 0}
     """.replace(r"\t", "")
 
     @classmethod
@@ -72,7 +67,7 @@ class Module(AbstractDataSource):
         Returns
             a pathlib.Path to the written file.
         """
-        dumpfile = output_path / "dump.sql"
+        dumpfile = output_path / "dump.json"
         with dumpfile.open("w", encoding="utf-8") as out_file:
             out_file.write(cls.data_file)
         return dumpfile
@@ -90,10 +85,15 @@ class Module(AbstractDataSource):
                 a list of endpointd provided by the storage module.
         """
         endpoint = endpoints[0]
-        getinfo = re.compile(r".*\/\/(.*?):(\d+)$")
-        matches = getinfo.match(endpoint)
-        engine = sqlalchemy.create_engine(f"mariadb+pymysql://{matches.group(1)}")
-        client = pymongo.MongoClient("matches.group(1)", int(matches.group(2)))
+        client = pymongo.MongoClient(endpoint)
+        db = client.get_default_database()
+        collection_names = db.list_collection_names()
+        for name in collection_names:
+            print("collection name: \"", name, "\" , documents: ", sep="", end="")
+            collection = db.get_collection(name)
+            print(collection.count_documents({}))
+            for doc in collection.find():
+                print(doc)
 
     def get(self, what, name="all", add=False):
         """Get the data.

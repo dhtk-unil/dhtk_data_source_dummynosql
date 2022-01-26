@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/dhtk_data_source_gutenberg.iml" filepath="$PROJECT_DIR$/.idea/dhtk_data_source_gutenberg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dhtk_data_source_dummymongo.iml" filepath="$PROJECT_DIR$/.idea/dhtk_data_source_dummymongo.iml" />
     </modules>
   </component>
 </project>

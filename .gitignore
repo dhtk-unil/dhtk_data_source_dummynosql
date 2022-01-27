@@ -12,6 +12,7 @@
 dhtk/core/client.py
 process/**
 ./__init__.py
+./idea
 
 # Generated files
 .idea/**/contentModel.xml

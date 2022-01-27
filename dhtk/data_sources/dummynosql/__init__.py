@@ -1,3 +1,4 @@
+
 """
 This module is a minimal example for DHTK data sources using Mongo database.
 
@@ -14,7 +15,7 @@ $ pip install dhtk_storage_docker
 Example:
 
 >>> import dhtk
->>> d = dhtk.start("../WD", data_source="dummymongo", storage="docker")
+>>> d = dhtk.start("../WD", data_source="dummynosql", storage="docker")
 """
 import warnings
 import re
@@ -40,7 +41,7 @@ class Module(AbstractDataSource):
         The class method "get_data_file"  method should always accept the arguments:
         The __init__ method should always accept the arguments: working_directory and endpoints.
     """
-    name = "dummymongo"
+    name = "dummynosql"
     storage_type = "nosql"
     data_file = """{ "_id" : 1, "title" : "Unlocking Android", "isbn" : "1933988673", "pageCount" : 416}
 { "_id" : 2, "title" : "Android in Action, Second Edition", "isbn" : "1935182722", "pageCount" : 592}

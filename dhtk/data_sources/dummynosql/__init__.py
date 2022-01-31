@@ -86,8 +86,8 @@ class Module(AbstractDataSource):
                 a list of endpointd provided by the storage module.
         """
         endpoint = endpoints[0]
-        client = pymongo.MongoClient(endpoint)
-        db = client.get_default_database()
+        self.client = pymongo.MongoClient(endpoint)
+        db = self.client.get_default_database()
         collection_names = db.list_collection_names()
         for name in collection_names:
             print("collection name: \"", name, "\" , documents: ", sep="", end="")

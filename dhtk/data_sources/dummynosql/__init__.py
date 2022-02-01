@@ -71,7 +71,6 @@ class Module(AbstractDataSource):
         dumpfile = output_path / "dump.json"
         with dumpfile.open("w", encoding="utf-8") as out_file:
             out_file.write(cls.data_file)
-        return dumpfile
 
     def __init__(self, working_directory, endpoints):
         """

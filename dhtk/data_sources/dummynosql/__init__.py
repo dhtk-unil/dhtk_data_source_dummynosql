@@ -1,4 +1,4 @@
-
+# coding=utf-8
 """
 This module is a minimal example for DHTK data sources using Mongo database.
 
@@ -17,11 +17,12 @@ Example:
 >>> import dhtk
 >>> d = dhtk.start("../WD", data_source="dummynosql", storage="docker")
 """
-import warnings
-import re
 import logging
+import pathlib
+import warnings
 
 import pymongo
+
 from dhtk.data_sources.blueprint import AbstractDataSource
 
 logger = logging.getLogger(__name__)
@@ -31,32 +32,32 @@ warnings.formatwarning = lambda message, *args: f"{message}\n"
 
 class Module(AbstractDataSource):
     """
-    This class exemplifies a DHTK datasource using an Mongo Database.
+    This class exemplifies a DHTK datasource using a Mongo Database.
 
     Notes:
-        Always name the class "Module" and always inherit from AbstactDataSource
-        The class attibutes: "name" "storage_type" "data_file" and the class method "get_data_file"
+        Always name the class "Module" and always inherit from AbstractDataSource
+        The class attributes: "name" "storage_type" "data_file" and the class method "get_data_file"
         and the "get" method have to be defined.
         The attribute "name" has to be the same as NAME_OF_THE_DATA_SOURCE.
         The class method "get_data_file"  method should always accept the arguments:
         The __init__ method should always accept the arguments: working_directory and endpoints.
     """
     name = "dummynosql"
-    storage_type = "nosql"
+    storage_type: str = "nosql"
     data_file = """{ "_id" : 1, "title" : "Unlocking Android", "isbn" : "1933988673", "pageCount" : 416}
 { "_id" : 2, "title" : "Android in Action, Second Edition", "isbn" : "1935182722", "pageCount" : 592}
 { "_id" : 3, "title" : "Specification by Example", "isbn" : "1617290084", "pageCount" : 0}
     """.replace(r"\t", "")
 
     @classmethod
-    def get_data_file(cls, output_path, storage_type):
+    def get_data_file(cls, output_path:pathlib.Path, storage_type: str):
         """Put the datafile to the output path.
 
         In this case we write the data_file specified as string in the class attribute "data_file"
         to the output_path.
 
         Notes:
-            the file should be an sql dump.
+            the file should be a sql dump.
             This dump will be loaded onto the database by the storage module.
 
         Args:
@@ -80,17 +81,17 @@ class Module(AbstractDataSource):
 
         Args:
             working_directory:
-                will recive the dhtk working directory.
+                will receive the dhtk working directory.
             endpoints:
-                a list of endpointd provided by the storage module.
+                a list of endpoints provided by the storage module.
         """
         endpoint = endpoints[0]
         self.client = pymongo.MongoClient(endpoint)
-        db = self.client.get_default_database()
-        collection_names = db.list_collection_names()
+        database = self.client.get_default_database()
+        collection_names = database.list_collection_names()
         for name in collection_names:
             print("collection name: \"", name, "\" , documents: ", sep="", end="")
-            collection = db.get_collection(name)
+            collection = database.get_collection(name)
             print(collection.count_documents({}))
             for doc in collection.find():
                 print(doc)

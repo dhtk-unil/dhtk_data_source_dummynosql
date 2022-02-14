@@ -42,6 +42,10 @@ class Module(AbstractDataSource):
         The class method "get_data_file"  method should always accept the arguments:
         The __init__ method should always accept the arguments: working_directory and endpoints.
     """
+
+    def search(self, what: str, name_or_id: str):
+        pass
+
     name = "dummynosql"
     storage_type: str = "nosql"
     data_file = """{ "_id" : 1, "title" : "Unlocking Android", "isbn" : "1933988673", "pageCount" : 416}
@@ -50,7 +54,7 @@ class Module(AbstractDataSource):
     """.replace(r"\t", "")
 
     @classmethod
-    def get_data_file(cls, output_path:pathlib.Path, storage_type: str):
+    def get_data_file(cls, output_path: pathlib.Path, storage_type: str):
         """Put the datafile to the output path.
 
         In this case we write the data_file specified as string in the class attribute "data_file"
@@ -96,7 +100,7 @@ class Module(AbstractDataSource):
             for doc in collection.find():
                 print(doc)
 
-    def get(self, what, name="all", add=False):
+    def get(self, what, name_or_id="all", add=False):
         """Get the data.
 
         Notes:

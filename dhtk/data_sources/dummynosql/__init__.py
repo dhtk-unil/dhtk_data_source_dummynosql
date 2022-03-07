@@ -108,3 +108,6 @@ class Module(AbstractDataSource):
             interface for the user to use your data_source.
         """
         return "OK"
+
+    def search(self, what, name_or_id):
+        pass
